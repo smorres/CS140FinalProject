@@ -1,4 +1,4 @@
-package project;
+package projectview;
 import projectview.States;
 public class Job {
 	private int id;
