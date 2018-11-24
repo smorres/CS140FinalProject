@@ -5,7 +5,7 @@ public class Job {
 	private int startcodeIndex;
 	private int codeSize;
 	private int startmemoryIndex;
-	private int currentPC;
+	private int currentIP;
 	private int currentAcc;
 	private States currentState = States.NOTHING_LOADED;
 
@@ -45,16 +45,16 @@ public class Job {
 	public void setStartmemoryIndex(int startmemoryIndex) {
 		this.startmemoryIndex = startmemoryIndex;
 	}
-	public int getCurrentPC() {
-		return currentPC;
+	public int getCurrentIP() {
+		return currentIP;
 	}
-	public void setCurrentPC(int currentPC) {
-		this.currentPC = currentPC;
+	public void setCurrentIP(int currentIP) {
+		this.currentIP = currentIP;
 	}
 	public void reset() {
 		codeSize = 0;
 		currentState = States.NOTHING_LOADED;
 		currentAcc = 0;
-		currentPC = startcodeIndex;
+		currentIP = startcodeIndex;
 	}
 }

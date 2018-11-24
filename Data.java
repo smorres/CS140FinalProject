@@ -16,5 +16,11 @@ void setData(int index, int value) {
 	if(index < 0 || index>DATA_SIZE)throw new MemoryAccessException("Illegal access to data memory, index \" + index -- see the files above. ");
 	this.data[index] = value;
 }
+void clearData(int start, int end) {
+	for (int i = start; i < end; i++) {
+		data[i] = 0;
+	}
+	changedIndex = -1;
+}
 
 }
