@@ -1,5 +1,8 @@
 package project;
-
+import static project.Model.Mode.*;
+import static java.util.Map.entry;
+import java.util.Map;
+import java.util.Set;
 import static project.Model.Mode.*;
 import java.util.*;
 
@@ -7,6 +10,7 @@ import projectview.States;
 
 import java.io.*;
 import java.awt.*;
+import static java.util.Map.entry;
 
 public class Model {
 
@@ -38,49 +42,34 @@ public class Model {
 		void halt();
 	}
 
+	public static final Map<Integer, String> MNEMONICS = Map.ofEntries(entry(0, "NOP"), entry(1, "LOD"),
+			entry(2, "STO"), entry(3, "ADD"), entry(4, "SUB"), entry(5, "MUL"), entry(6, "DIV"), entry(7, "AND"),
+			entry(8, "NOT"), entry(9, "CMPL"), entry(10, "CMPZ"), entry(11, "JUMP"), entry(12, "JMPZ"),
+			entry(15, "HALT"));
+
+	// NOTE THERE IS A DELIBERATE GAP for 13 and 14
+
+	public static final Map<String, Integer> OPCODES = Map.ofEntries(entry("NOP", 0), entry("LOD", 1), entry("STO", 2),
+			entry("ADD", 3), entry("SUB", 4), entry("MUL", 5), entry("DIV", 6), entry("AND", 7), entry("NOT", 8),
+			entry("CMPL", 9), entry("CMPZ", 10), entry("JUMP", 11), entry("JMPZ", 12), entry("HALT", 15));
+
+	public static final Set<String> NO_ARG_MNEMONICS = Set.of("NOP", "NOT", "HALT");
+
 	/*
-	 * public static final Map<Integer, String> MNEMONICS = Map.ofEntries( entry(0,
-	 * "NOP"), entry(1, "LOD"), entry(2, "STO"), entry(3, "ADD"), entry(4, "SUB"),
-	 * entry(5, "MUL"), entry(6, "DIV"), entry(7, "AND"), entry(8, "NOT"), entry(9,
-	 * "CMPL"), entry(10, "CMPZ"), entry(11, "JUMP"), entry(12, "JMPZ"), entry(15,
-	 * "HALT"));
+	 * public static final Map<Integer, String> MNEMONICS = new HashMap<>();
 	 * 
-	 * // NOTE THERE IS A DELIBERATE GAP for 13 and 14
+	 * public static final Map<String, Integer> OPCODES = new HashMap<>();
 	 * 
-	 * public static final Map<String, Integer> OPCODES = Map.ofEntries(
-	 * entry("NOP", 0), entry("LOD", 1), entry("STO", 2), entry("ADD",
-	 * 3),entry("SUB", 4), entry("MUL", 5), entry("DIV", 6), entry("AND", 7),
-	 * entry("NOT", 8), entry("CMPL", 9), entry("CMPZ", 10), entry("JUMP", 11),
-	 * entry("JMPZ", 12), entry("HALT", 15));
-	 * 
-	 * public static final Set<String> NO_ARG_MNEMONICS = Set.of("NOP", "NOT",
+	 * static { MNEMONICS.put(0, "NOP"); MNEMONICS.put(1, "LOD"); MNEMONICS.put(2,
+	 * "STO"); MNEMONICS.put(3, "ADD"); MNEMONICS.put(4, "SUB"); MNEMONICS.put(5,
+	 * "MUL"); MNEMONICS.put(6, "DIV"); MNEMONICS.put(7, "AND"); MNEMONICS.put(8,
+	 * "NOT"); MNEMONICS.put(9, "CMPL"); MNEMONICS.put(10, "CMPZ");
+	 * MNEMONICS.put(11, "JUMP"); MNEMONICS.put(12, "JMPZ"); MNEMONICS.put(15,
 	 * "HALT");
+	 * 
+	 * for (Integer key : MNEMONICS.keySet()) { OPCODES.put(MNEMONICS.get(key),
+	 * key); } }
 	 */
-	public static final Map<Integer, String> MNEMONICS = new HashMap<>();
-
-	public static final Map<String, Integer> OPCODES = new HashMap<>();
-
-	static {
-		MNEMONICS.put(0, "NOP");
-		MNEMONICS.put(1, "LOD");
-		MNEMONICS.put(2, "STO");
-		MNEMONICS.put(3, "ADD");
-		MNEMONICS.put(4, "SUB");
-		MNEMONICS.put(5, "MUL");
-		MNEMONICS.put(6, "DIV");
-		MNEMONICS.put(7, "AND");
-		MNEMONICS.put(8, "NOT");
-		MNEMONICS.put(9, "CMPL");
-		MNEMONICS.put(10, "CMPZ");
-		MNEMONICS.put(11, "JUMP");
-		MNEMONICS.put(12, "JMPZ");
-		MNEMONICS.put(15, "HALT");
-
-		for (Integer key : MNEMONICS.keySet()) {
-			OPCODES.put(MNEMONICS.get(key), key);
-		}
-	}
-
 	static class CPU {
 		private int accumulator, instructionPointer, memoryBase;
 	};
@@ -262,10 +251,11 @@ public class Model {
 			callBack.halt();
 		};
 	}
-	//TODO getdata will not work in this context
-	/*public int[] getData() {
+	// TODO getdata will not work in this context
+
+	public int[] getData() {
 		return dataMemory.getData();
-	}*/
+	}
 
 	public int getInstrPtr() {
 		return cpu.instructionPointer;
