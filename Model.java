@@ -1,4 +1,5 @@
 package project;
+
 import static project.Model.Mode.*;
 import static java.util.Map.entry;
 import java.util.Map;
@@ -138,7 +139,7 @@ public class Model {
 				throw new IllegalArgumentException("Illegal Mode in SUB instruction");
 			}
 			if (mode != IMMEDIATE) {
-				INSTR[0x3].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
+				INSTR[0x4].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
 			} else {
 				cpu.accumulator -= arg;
 				cpu.instructionPointer++;
@@ -151,7 +152,7 @@ public class Model {
 				throw new IllegalArgumentException("Illegal Mode in MULT instruction");
 			}
 			if (mode != IMMEDIATE) {
-				INSTR[0x3].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
+				INSTR[0x5].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
 			} else {
 				cpu.accumulator *= arg;
 				cpu.instructionPointer++;
@@ -163,7 +164,7 @@ public class Model {
 				throw new IllegalArgumentException("Illegal Mode in DIV instruction");
 			}
 			if (mode != IMMEDIATE) {
-				INSTR[0x3].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
+				INSTR[0x6].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
 			} else {
 				if (arg == 0) {
 					throw new DivideByZeroException("Divide by Zero");
@@ -177,11 +178,18 @@ public class Model {
 			if (mode == null) {
 				throw new IllegalArgumentException("Illegal Mode in AND instruction");
 			}
-			if (arg != 0 && cpu.accumulator != 0) {
-				cpu.accumulator = 1;
+			if (mode != IMMEDIATE) {
+				INSTR[0x7].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
 
 			} else {
-				cpu.accumulator = 0;
+				if(arg != 0 && cpu.accumulator != 0) {
+					cpu.accumulator = 1;
+				}
+				
+				else {
+					cpu.accumulator = 0;
+				}
+				
 				cpu.instructionPointer++;
 
 			}
@@ -208,8 +216,8 @@ public class Model {
 			if (mode != DIRECT) {
 				INSTR[0x9].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
 			} else {
-				int arg1 = dataMemory.getData(cpu.memoryBase + arg);
-				if (arg1 < 0) {
+				arg = dataMemory.getData(cpu.memoryBase + arg);
+				if (arg < 0) {
 					cpu.accumulator = 1;
 				} else {
 					cpu.accumulator = 0;
@@ -226,20 +234,21 @@ public class Model {
 			if (mode != DIRECT) {
 				INSTR[0xa].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
 			} else {
-				int arg1 = dataMemory.getData(cpu.memoryBase + arg);
-				if (arg1 == 0) {
+				arg = dataMemory.getData(cpu.memoryBase + arg);
+				if (arg == 0) {
 					cpu.accumulator = 1;
 				} else {
 					cpu.accumulator = 0;
 				}
+				
 				cpu.instructionPointer++;
 			}
 		};
 		INSTR[0xb] = (arg, mode) -> {
 			// JUMP
 			if (mode == null) {
-				int arg1 = dataMemory.getData(cpu.memoryBase + arg);
-				cpu.instructionPointer = arg1 + currentJob.getStartcodeIndex();
+				arg = dataMemory.getData(cpu.memoryBase + arg);
+				cpu.instructionPointer = arg + currentJob.getStartcodeIndex();
 			} else if (mode != IMMEDIATE) {
 				INSTR[0xb].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
 
@@ -247,6 +256,26 @@ public class Model {
 				cpu.instructionPointer = cpu.instructionPointer + arg;
 			}
 		};
+		
+		INSTR[0xc] = (arg, mode) -> {
+			// JMPZ
+			if(cpu.accumulator == 0) {
+				if (mode == null) {
+					arg = dataMemory.getData(cpu.memoryBase + arg);
+					cpu.instructionPointer = arg + currentJob.getStartcodeIndex();
+				} else if (mode != IMMEDIATE) {
+					INSTR[0xc].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
+	
+				} else {
+					cpu.instructionPointer = cpu.instructionPointer + arg;
+				}
+			}
+			
+			else {
+				cpu.instructionPointer ++;
+			}
+		};
+		
 		INSTR[0xf] = (arg, mode) -> {
 			callBack.halt();
 		};
