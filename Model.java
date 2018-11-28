@@ -147,9 +147,9 @@ public class Model {
 
 		};
 		INSTR[0x5] = (arg, mode) -> {
-			// MULT
+			// MUL
 			if (mode == null) {
-				throw new IllegalArgumentException("Illegal Mode in MULT instruction");
+				throw new IllegalArgumentException("Illegal Mode in MUL instruction");
 			}
 			if (mode != IMMEDIATE) {
 				INSTR[0x5].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
@@ -203,9 +203,9 @@ public class Model {
 				cpu.accumulator = 0;
 			} else {
 				cpu.accumulator = 1;
-				cpu.instructionPointer++;
+				
 
-			}
+			}cpu.instructionPointer++;
 
 		};
 		INSTR[0x9] = (arg, mode) -> {
@@ -229,7 +229,7 @@ public class Model {
 		INSTR[0xa] = (arg, mode) -> {
 			// CMPZ
 			if (mode == null || mode == IMMEDIATE) {
-				throw new IllegalArgumentException("Illegal Mode in CMPL instruction");
+				throw new IllegalArgumentException("Illegal Mode in CMPZ instruction");
 			}
 			if (mode != DIRECT) {
 				INSTR[0xa].execute(dataMemory.getData(cpu.memoryBase + arg), mode.next());
