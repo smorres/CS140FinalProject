@@ -55,6 +55,9 @@ public class Model {
 			entry("CMPL", 9), entry("CMPZ", 10), entry("JUMP", 11), entry("JMPZ", 12), entry("HALT", 15));
 
 	public static final Set<String> NO_ARG_MNEMONICS = Set.of("NOP", "NOT", "HALT");
+	public static final Set<String> IMM_IND_MNEMONICS = Set.of("LOD", "ADD", "SUB", "MUL", "DIV", "AND");
+	public static final Set<String> IND_MNEMONICS = Set.of("STO", "CMPL", "CPMZ");
+	public static final Set<String> JMP_MNEMONICS = Set.of("JUMP", "JMPZ");
 
 	/*
 	 * public static final Map<Integer, String> MNEMONICS = new HashMap<>();
@@ -203,9 +206,9 @@ public class Model {
 				cpu.accumulator = 0;
 			} else {
 				cpu.accumulator = 1;
-				
-
-			}cpu.instructionPointer++;
+			}
+			
+			cpu.instructionPointer++;
 
 		};
 		INSTR[0x9] = (arg, mode) -> {
