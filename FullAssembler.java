@@ -222,7 +222,6 @@ public class FullAssembler extends Assembler {
 								else if(parts[1].charAt(0) == '&'){
 									//update parts[1] so it removes the '&' at the beginning
 									parts[1] = parts[1].substring(1);
-									
 									if(!Model.JMP_MNEMONICS.contains(parts[0])) {
 										errors.put(lineNum, "Error on line " + lineNum + 
 												": instruction does not allow jump addressing");

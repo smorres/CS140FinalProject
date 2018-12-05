@@ -98,7 +98,7 @@ public class GUIMediator {
 	public void reload() {
 		stepControl.setAutoStepOn(false);
 		clearJob();
-		filesMgr.finalLoad_ReloadStep(model.getCurrentJob());
+		filesMgr.finalLoad_Reload(model.getCurrentJob()); //TODO Make sure this is correct! Originally was finalLoad_ReloadStep
 	}
 
 	public void assembleFile() {
@@ -185,9 +185,9 @@ public class GUIMediator {
 		frame.add(processorPanel.createProcessorDisplay(), BorderLayout.PAGE_START);
 		JPanel center = new JPanel();
 		center.setLayout(new GridLayout(1, 3));
-		center.add(dataViewPanel1.createMemoryDisplay());
-		center.add(dataViewPanel2.createMemoryDisplay());
-		center.add(dataViewPanel3.createMemoryDisplay());
+		center.add(dataViewPanel1.createDataDisplay()); //TODO should this be create memory display?????
+		center.add(dataViewPanel2.createDataDisplay());
+		center.add(dataViewPanel3.createDataDisplay());
 		frame.add(center, BorderLayout.CENTER);
 		frame.add(controlPanel.createControlDisplay(), BorderLayout.PAGE_END);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
