@@ -62,11 +62,10 @@ public class MenuBarBuilder {
 	public JMenu createExecuteMenu() {
 		JMenu menu = new JMenu("Execute");
 		menu.setMnemonic(KeyEvent.VK_X); // so you can use ALT-X to open the Execute menu
-
-		assemble.setMnemonic(KeyEvent.VK_G);
-		assemble.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
-		assemble.addActionListener(e -> gui.execute());
-		menu.add(assemble);
+		go.setMnemonic(KeyEvent.VK_G);
+		go.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
+		go.addActionListener(e -> gui.execute());
+		menu.add(go);
 		return menu;
 	}
 
@@ -95,7 +94,7 @@ public class MenuBarBuilder {
 		// Job3
 		job3.setMnemonic(KeyEvent.VK_3);
 		job3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, ActionEvent.CTRL_MASK));
-		job3.addActionListener(e -> gui.changeToJob(2));
+		job3.addActionListener(e -> gui.changeToJob(3));
 		menu.add(job3);
 		return menu;
 	}

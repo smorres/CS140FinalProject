@@ -27,7 +27,8 @@ public class FilesMgr {
 	private File[] currentlyExecutingFile = new File[4];
 
 	public FilesMgr(GUIMediator gm) {
-		gui = gm;
+		this.gui = gm;
+		this.model = gui.getModel();
 	}
 
 	public void initialize() {

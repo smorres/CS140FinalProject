@@ -36,7 +36,7 @@ public class ProcessorViewPanel {
 			ip.setText("" + model.getInstrPtr());
 			base.setText("" + model.getMemBase());
 		}
-
+		
 	}
 
 	public static void main(String[] args) {

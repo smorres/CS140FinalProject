@@ -28,7 +28,8 @@ public class GUIMediator {
 	private ControlPanel controlPanel;
 	private ProcessorViewPanel processorPanel;
 	private MenuBarBuilder menuBuilder;
-	States s = model.getCurrentState(); 
+	private States s;
+
 	public Model getModel() {
 		return this.model;
 	}
@@ -93,12 +94,15 @@ public class GUIMediator {
 		} else {
 			model.setCurrentState(States.PROGRAM_LOADED_NOT_AUTOSTEPPING);
 		}
+		model.getCurrentState().enter();
+		notifyObservers("");
 	}
 
 	public void reload() {
 		stepControl.setAutoStepOn(false);
 		clearJob();
-		filesMgr.finalLoad_Reload(model.getCurrentJob()); //TODO Make sure this is correct! Originally was finalLoad_ReloadStep
+		filesMgr.finalLoad_Reload(model.getCurrentJob()); // TODO Make sure this is correct! Originally was
+															// finalLoad_ReloadStep
 	}
 
 	public void assembleFile() {
@@ -121,6 +125,7 @@ public class GUIMediator {
 				JOptionPane.showMessageDialog(frame, "Illegal access to data from line " + model.getInstrPtr() + "\n"
 						+ "Exception message: " + e.getMessage(), "Run time error", JOptionPane.OK_OPTION);
 			} catch (CodeAccessException e) {
+
 				// copy the previous catch details but cahnge "data" to "code"
 			} catch (NullPointerException e) {
 				// copy the previous catch, changing "Illegal access to data" to
@@ -153,12 +158,14 @@ public class GUIMediator {
 				// copy the previous catch, changing "Illegal access to data" to "Divide by
 				// zero"
 			}
-			
-		}notifyObservers("");
+
+		}
+		notifyObservers("");
 	}
 
 	// some complete methods:
 	private void createAndShowGUI() {
+		s = model.getCurrentState();
 		stepControl = new TimerControl(this);
 		filesMgr = new FilesMgr(this);
 		filesMgr.initialize();
@@ -185,7 +192,7 @@ public class GUIMediator {
 		frame.add(processorPanel.createProcessorDisplay(), BorderLayout.PAGE_START);
 		JPanel center = new JPanel();
 		center.setLayout(new GridLayout(1, 3));
-		center.add(dataViewPanel1.createDataDisplay()); //TODO should this be create memory display?????
+		center.add(dataViewPanel1.createDataDisplay()); // TODO should this be create memory display?????
 		center.add(dataViewPanel2.createDataDisplay());
 		center.add(dataViewPanel3.createDataDisplay());
 		frame.add(center, BorderLayout.CENTER);
@@ -212,7 +219,10 @@ public class GUIMediator {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				GUIMediator organizer = new GUIMediator();
-				Model model = new Model(() -> organizer.setCurrentState(States.PROGRAM_HALTED));
+				Model model = new Model(() -> {
+					System.out.println("Halting");
+					organizer.setCurrentState(States.PROGRAM_HALTED);
+				});
 				organizer.setModel(model);
 				organizer.createAndShowGUI();
 			}

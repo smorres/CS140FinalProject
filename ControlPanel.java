@@ -7,6 +7,8 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
+import project.Model;
+
 public class ControlPanel {
 	private GUIMediator gui;
 	private JButton stepButton = new JButton("Step");
@@ -15,8 +17,9 @@ public class ControlPanel {
 	private JButton reloadButton = new JButton("Reload");
 
 	public ControlPanel(GUIMediator guiMediator) {
-		// TODO Auto-generated constructor stub
+		this.gui=guiMediator;
 	}
+	
 
 	public JComponent createControlDisplay() {
 		JPanel panel = new JPanel();

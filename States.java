@@ -15,38 +15,38 @@ public enum States {
 	},
 	NOTHING_LOADED {
 		public void enter() {
-			states[ASSEMBLE] = false;
+			states[ASSEMBLE] = true;
 			states[CLEAR] = false;
-			states[LOAD] = false;
+			states[LOAD] = true;
 			states[RELOAD] = false;
-			states[RUN] = true;
-			states[RUNNING] = true;
+			states[RUN] = false;
+			states[RUNNING] = false;
 			states[STEP] = false;
-			states[CHANGE_JOB] = false;
+			states[CHANGE_JOB] = true;
 		}
 	},
 	PROGRAM_HALTED {
 		public void enter() {
-			states[ASSEMBLE] = false;
-			states[CLEAR] = false;
-			states[LOAD] = false;
-			states[RELOAD] = false;
-			states[RUN] = true;
-			states[RUNNING] = true;
+			states[ASSEMBLE] = true;
+			states[CLEAR] = true;
+			states[LOAD] = true;
+			states[RELOAD] = true;
+			states[RUN] = false;
+			states[RUNNING] = false;
 			states[STEP] = false;
-			states[CHANGE_JOB] = false;
+			states[CHANGE_JOB] = true;
 		}
 	},
 	PROGRAM_LOADED_NOT_AUTOSTEPPING {
 		public void enter() {
-			states[ASSEMBLE] = false;
-			states[CLEAR] = false;
-			states[LOAD] = false;
-			states[RELOAD] = false;
+			states[ASSEMBLE] = true;
+			states[CLEAR] = true;
+			states[LOAD] = true;
+			states[RELOAD] = true;
 			states[RUN] = true;
-			states[RUNNING] = true;
-			states[STEP] = false;
-			states[CHANGE_JOB] = false;
+			states[RUNNING] = false;
+			states[STEP] = true;
+			states[CHANGE_JOB] = true;
 		}
 	};
 	private static final int ASSEMBLE = 0;

@@ -35,11 +35,11 @@ public class Model {
 		}
 	}
 
-	static interface Instruction {
+	static interface Instruction { //TODO should this be private 
 		void execute(int arg, Mode mode);
 	}
 
-	static interface HaltCallBack {
+	public static interface HaltCallBack {
 		void halt();
 	}
 
@@ -58,7 +58,6 @@ public class Model {
 	public static final Set<String> IMM_IND_MNEMONICS = Set.of("LOD", "ADD", "SUB", "MUL", "DIV", "AND");
 	public static final Set<String> IND_MNEMONICS = Set.of("STO", "CMPL", "CPMZ");
 	public static final Set<String> JMP_MNEMONICS = Set.of("JUMP", "JMPZ");
-
 	/*
 	 * public static final Map<Integer, String> MNEMONICS = new HashMap<>();
 	 * 
@@ -206,9 +205,9 @@ public class Model {
 				cpu.accumulator = 0;
 			} else {
 				cpu.accumulator = 1;
-			}
-			
-			cpu.instructionPointer++;
+				
+
+			}cpu.instructionPointer++;
 
 		};
 		INSTR[0x9] = (arg, mode) -> {
@@ -283,7 +282,7 @@ public class Model {
 			callBack.halt();
 		};
 	}
-	// TODO getdata will not work in this context
+
 
 	public int[] getData() {
 		return dataMemory.getData();
@@ -326,7 +325,7 @@ public class Model {
 	}
 
 	public void changeToJob(int i) {
-		// TODO Auto-generated method stub
+		
 		if (1 < i || i > 3) { // if i is less than one or greater than 3
 			throw new IllegalArgumentException("should not happen, but i is less than one or greater than 3");
 		}
