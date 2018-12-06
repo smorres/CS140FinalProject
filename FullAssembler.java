@@ -10,9 +10,9 @@ import java.util.TreeMap;
 public class FullAssembler extends Assembler {
 	@Override
 	public int assemble(String inputFileName, String outputFileName, TreeMap<Integer, String> errors) {
-		if (errors == null)
+		if (errors == null) {
 			throw new IllegalArgumentException("Coding error: the error map is null");
-
+		}
 		// we return the last line number we found an error on. you will have to update
 		// it
 		// to the right value as you add error messages to the TreeMap errors, which you
@@ -93,7 +93,9 @@ public class FullAssembler extends Assembler {
 						else {
 							errors.put(lineNum, "error: duplicate DATA delimeter");
 						}
-
+						if (!line.trim().contains("DATA")) {
+							errors.put(lineNum, "error: DATA delimeter must be all uppercase");
+						}
 						if (!line.trim().toUpperCase().equals("DATA")) {
 							errors.put(lineNum, "error: contains extra material on the line");
 							inCode = true;
@@ -109,10 +111,6 @@ public class FullAssembler extends Assembler {
 						// with DATA). hopefully this justifies the else
 						// if the trimmed line does not equal DATA without uppercasing it
 						// then we report an error, saying the DATA delimeter must be all uppercase
-					}
-
-					else {
-						errors.put(lineNum, "error: DATA delimeter must be all uppercase");
 					}
 				}
 
@@ -153,12 +151,13 @@ public class FullAssembler extends Assembler {
 					// if OPCODES.containsKey() returns true when you pass
 					// in parts[0].toUpperCase(), then parts[0] is an valid mnemonic.
 					if (Model.OPCODES.containsKey(parts[0].toUpperCase())) {
+						
 						// check if the valid mnemonic is all uppercase
 						// if it is not, report an error message saying the mnemonic must be upper case
 
 						// next, we check if the mnemonic takes no arguments
 						if (Model.NO_ARG_MNEMONICS.contains(parts[0])) {
-							errors.put(lineNum, "error: instruction was given an argument");
+							if(parts.length>1) errors.put(lineNum, "error: instruction was given an argument");
 							// but now, if this instruction was given an argument
 							// report an error saying the mnemonic cannot take arguments
 							// you can check to see if an argument was provided by checking if
@@ -186,7 +185,7 @@ public class FullAssembler extends Assembler {
 									// need to remove that special char so we have the argument
 									parts[1] = parts[1].substring(1);
 									// we are told to make this set in Model, see part 2 number 6 in the steps.
-									if (!Model.IND_MNEMONICS.contains(parts[0])) {
+									if (Model.IND_MNEMONICS.contains(parts[0])) {
 										errors.put(lineNum, "Error on line " + lineNum
 												+ ": instruction does not allow immediate addressing");
 										retVal = lineNum;
@@ -198,12 +197,6 @@ public class FullAssembler extends Assembler {
 								// parts[1], as we did similiarly in the '#' block
 								else if (parts[1].charAt(0) == '@') {
 									parts[1] = parts[1].substring(1);
-
-									if (!Model.IND_MNEMONICS.contains(parts[0])) {
-										errors.put(lineNum, "Error on line " + lineNum
-												+ ": instruction does not allow immediate addressing");
-										retVal = lineNum;
-									}
 								}
 								// check for '&' for the special "null" mode of JUMP and JMPZ
 								else if (parts[1].charAt(0) == '&') {
@@ -301,14 +294,14 @@ public class FullAssembler extends Assembler {
 	}
 
 	// this main will help make debugging the Full Assembler easier
-	public static void main(String[] args) { 
-	    Assembler test = new FullAssembler();
-	    Scanner scan = new Scanner(System.in);
-	    TreeMap<Integer, String> errors = new TreeMap<>(); 
-	    System.out.println("Enter the filename you want to assemble: "); 
-	    String filename = scan.nextLine(); 
-	    test.assemble("pasm/" + filename + ".pasm", "pexe/" + filename + ".pexe", errors); 
-	    System.out.println("\n-----------------------------------------------------------------\n"); 
-	    scan.close();
+	public static void main(String[] args) {
+		Assembler test = new FullAssembler();
+		Scanner scan = new Scanner(System.in);
+		TreeMap<Integer, String> errors = new TreeMap<>();
+		System.out.println("Enter the filename you want to assemble: ");
+		String filename = scan.nextLine();
+		test.assemble("pasm/" + filename + ".pasm", "pexe/" + filename + ".pexe", errors);
+		System.out.println("\n-----------------------------------------------------------------\n");
+		scan.close();
 	}
 }
